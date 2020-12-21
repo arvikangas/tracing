@@ -51,7 +51,7 @@ namespace SqlApp.Database
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-432MPBM;Database=Northwind;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=localhost,1433;Database=Northwind;User=sa;Password=Your_password123;");
             }
         }
 

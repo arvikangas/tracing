@@ -41,6 +41,13 @@ services:
       - "5601:5601"
     networks:
       - elastic-jaeger
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
 
 volumes:
   esdata:
