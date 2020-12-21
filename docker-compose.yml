@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.0
+    networks:
+      - elastic-jaeger
+    ports:
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9300:9300"
+    restart: on-failure
+    environment:
+      - cluster.name=jaeger-cluster
+      - discovery.type=single-node
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+    environment:
+      - "SPAN_STORAGE_TYPE=elasticsearch"
+      - "ES_SERVER_URLS=http://elasticsearch:9200"
+      - "ES_TAGS_AS_FIELDS_ALL=true"
+    depends_on:
+      - elasticsearch
+    restart: on-failure
+    networks:
+      - elastic-jaeger
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.8.0
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic-jaeger
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  elastic-jaeger:
+    driver: bridge 

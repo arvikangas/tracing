@@ -1,0 +1,33 @@
+@url = http://localhost:5000
+
+### Get
+GET {{url}}
+
+### Get prometheus metrics
+GET {{url}}/metrics
+
+### Get orders
+GET {{url}}/orders
+
+
+### Get order
+GET {{url}}/orders/10257
+
+### update elasticsearch
+PUT http://localhost:9200/jaeger-span-2020-12-20/_mapping
+Content-Type: application/json
+
+{
+  "mappings": {
+    "properties": {
+      "tag": {
+        "properties": {
+            "db@statement": {
+                "type": "keyword",
+                "ignore_above": 1000
+            }
+        }
+      }
+    }
+  }
+}
