@@ -3,6 +3,7 @@
 
 * App uses OpenTelemetry packages OpenTelemetry packages to gather traces. Packages: OpenTelemetry, OpenTelemetry.Exporter.Jaeger, 
 OpenTelemetry.Instrumentation.AspNetCore, OpenTelemetry.Instrumentation.SqlClient
+* .NET core for application. version 3.1
 * MS SQL for application database
 * Jaeger to gather traces from app.
 * Elasticsearch to store traces
@@ -17,6 +18,14 @@ OpenTelemetry.Instrumentation.AspNetCore, OpenTelemetry.Instrumentation.SqlClien
 
 Finding slowest sql queries could be done also from Jaeger, but without UI. Jaeger has API endpoints to query data but then I'd have to build somekinda UI to show them. I also needed elasticsearch to store traces. So i went lazy route and added Kibana that has better UI.
 
-## End result
+### End result
 
 ![Result](https://github.com/arvikangas/tracing/blob/main/images/Result.png)
+
+### To Run
+
+* start services with docker-compose up
+* start application after services are up. In directory ./SqlApp/SqlApp run command dotnet run
+* run some http queries against application. For example GET http://localhost:5000/orders. Http queries are saved in /queries folder
+* Watch traces appear in: Jaeger http://localhost:16686 and Kibana http://localhost:5601
+* NB! i have not added Kibana configuration. Kibana requires choosing index from elasticsearch and also configuration update (for elasticsearch) so it would aggregate on sql query text.
